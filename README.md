@@ -7,11 +7,11 @@ Guests first see a sealed gatefold envelope (rose vines, silk ribbon, wax seal).
 ## Files
 
 - `index.html` — the whole site (markup, styles, script, and the animated strands)
-- `art.jpg` — the painted background, cleaned from the original invitation photo. The title area is blank so the names and date render as live text on top of it, and the garden continues through the archway.
-- `curtain.png` — the painted jasmine curtain cut out of the same photo. The page slices it into thin strips that swing from the crown of the arch when touched.
+- `art.jpg` — the painted background (1080×2308), cleaned from the original invitation photo after a 4× Real-ESRGAN upscale. The title area is blank so the names and date render as live text on top of it, and the stone archway continues behind the curtain.
+- `curtain.png` — the painted jasmine curtain cut out of the same upscaled photo. The page slices it into thin strips that swing from the crown of the arch when touched.
 - `.nojekyll` — tells GitHub Pages to serve the folder as-is
 
-To use different artwork, replace `art.jpg` with a 540×1154 image (or any portrait image with the same proportions) whose top third is clear enough to hold the text.
+To use different artwork, replace `art.jpg` with a 1080×2308 image (or any portrait image with the same 540:1154 proportions) whose top third is clear enough to hold the text.
 
 ## Filling in your details
 

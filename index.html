@@ -267,7 +267,7 @@ button{font-family:inherit}
 
 <main class="stage">
   <section class="card" id="card" aria-label="Nikah invitation">
-    <img src="art.jpg?v=5" alt="A bride and groom seated beside a tall archway of red roses in a Mughal garden">
+    <img src="art.jpg?v=6" alt="A bride and groom seated beside a tall archway of red roses in a Mughal garden">
 
     <svg class="overlay" viewBox="0 0 540 1154" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs id="defs">
@@ -614,7 +614,7 @@ const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 42
       mk('rect', { x, y, width:w, height:h, fill:'url(#feather)' }, mask);
       const ox = k ? xc : CX, oy = k ? JOINTS[k] : CY;         // top segment swings from the crown, lower ones from the joint above
       const seg = mk('g', { class: k ? 'joint' : 'strand', style:`transform-origin:${ox.toFixed(1)}px ${oy}px;--a1:${a1.toFixed(1)}deg;--dl:${dl}s` }, parent);
-      mk('image', { href:'curtain.png?v=5', x:X0, y:Y0, width:W, height:H, mask:`url(#m${i}_${k})`, preserveAspectRatio:'none' }, seg);
+      mk('image', { href:'curtain.png?v=6', x:X0, y:Y0, width:W, height:H, mask:`url(#m${i}_${k})`, preserveAspectRatio:'none' }, seg);
       parent = seg;
     }
   }

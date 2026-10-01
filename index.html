@@ -48,7 +48,7 @@ button{font-family:inherit}
 .card.opened .strand{transform:rotate(var(--a1))}
 /* lower segments swing back toward vertical, so the strand bows and droops under its own weight */
 .joint{transform:rotate(0deg);transition:transform 2.4s cubic-bezier(.3,.75,.3,1.04) calc(var(--dl) + .1s);will-change:transform}
-.card.opened .joint{transform:rotate(calc(var(--a1) * -.3))}
+.card.opened .joint{transform:rotate(calc(var(--a1) * -.5))}
 .strand image{image-rendering:auto}
 
 /* Hit target + hint */
@@ -267,7 +267,7 @@ button{font-family:inherit}
 
 <main class="stage">
   <section class="card" id="card" aria-label="Nikah invitation">
-    <img src="art.jpg?v=7" alt="A bride and groom seated beside a tall archway of red roses in a Mughal garden">
+    <img src="art.jpg?v=8" alt="A bride and groom seated beside a tall archway of red roses in a Mughal garden">
 
     <svg class="overlay" viewBox="0 0 540 1154" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs id="defs">
@@ -605,7 +605,9 @@ const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 42
     const side = c < 0 ? -1 : 1;
     const f = 1 - Math.abs(c)*2;                                 // 1 at centre .. 0 at the edge
     // NB: SVG rotate() with a positive angle swings a hanging strip to the LEFT, hence -side
-    const a1 = -side * (30 + f*48) + (rnd()-.5)*3;
+    // modest swing so the curtain parts like tied-back drapes instead of lying flat across the scene
+    // kept small enough that the gathered strands settle against the rose rim, never over the couple
+    const a1 = -side * (12 + f*12) + (rnd()-.5)*1.5;
     const dl = (Math.abs(c)*.5 + rnd()*.08).toFixed(2);     // opens from the middle outward like a wave
     let parent = g;
     for (let k = 0; k < 3; k++){
@@ -614,7 +616,7 @@ const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 42
       mk('rect', { x, y, width:w, height:h, fill:'url(#feather)' }, mask);
       const ox = k ? xc : CX, oy = k ? JOINTS[k] : CY;         // top segment swings from the crown, lower ones from the joint above
       const seg = mk('g', { class: k ? 'joint' : 'strand', style:`transform-origin:${ox.toFixed(1)}px ${oy}px;--a1:${a1.toFixed(1)}deg;--dl:${dl}s` }, parent);
-      mk('image', { href:'curtain.png?v=7', x:X0, y:Y0, width:W, height:H, mask:`url(#m${i}_${k})`, preserveAspectRatio:'none' }, seg);
+      mk('image', { href:'curtain.png?v=8', x:X0, y:Y0, width:W, height:H, mask:`url(#m${i}_${k})`, preserveAspectRatio:'none' }, seg);
       parent = seg;
     }
   }

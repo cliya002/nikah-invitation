@@ -267,7 +267,7 @@ button{font-family:inherit}
 
 <main class="stage">
   <section class="card" id="card" aria-label="Nikah invitation">
-    <img src="art.jpg?v=6" alt="A bride and groom seated beside a tall archway of red roses in a Mughal garden">
+    <img src="art.jpg?v=7" alt="A bride and groom seated beside a tall archway of red roses in a Mughal garden">
 
     <svg class="overlay" viewBox="0 0 540 1154" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs id="defs">
@@ -283,7 +283,7 @@ button{font-family:inherit}
         <text y="46" text-anchor="middle">touch the flowers</text>
       </g>
       <g id="hit" role="button" tabindex="0" aria-label="Touch the flowers to open the invitation">
-        <rect x="150" y="530" width="230" height="600" rx="115" fill="transparent"/>
+        <rect x="153" y="530" width="230" height="600" rx="115" fill="transparent"/>
       </g>
     </svg>
 
@@ -593,7 +593,7 @@ const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 42
 
 (function buildStrands(){
   // curtain.png is the painted curtain cropped from the artwork at this box (artwork px)
-  const X0 = 150, Y0 = 630, W = 214, H = 516;
+  const X0 = 161, Y0 = 630, W = 214, H = 516;
   const CX = 268, CY = 636;                 // crown of the arch: every strip swings from here
   const n = 28, step = W / n, overlap = step * .9;   // strand-width strips with soft overlapping edges
   const JOINTS = [Y0, 790, 950, Y0 + H];             // each strip is three hinged segments so it droops in a curve
@@ -614,7 +614,7 @@ const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 42
       mk('rect', { x, y, width:w, height:h, fill:'url(#feather)' }, mask);
       const ox = k ? xc : CX, oy = k ? JOINTS[k] : CY;         // top segment swings from the crown, lower ones from the joint above
       const seg = mk('g', { class: k ? 'joint' : 'strand', style:`transform-origin:${ox.toFixed(1)}px ${oy}px;--a1:${a1.toFixed(1)}deg;--dl:${dl}s` }, parent);
-      mk('image', { href:'curtain.png?v=6', x:X0, y:Y0, width:W, height:H, mask:`url(#m${i}_${k})`, preserveAspectRatio:'none' }, seg);
+      mk('image', { href:'curtain.png?v=7', x:X0, y:Y0, width:W, height:H, mask:`url(#m${i}_${k})`, preserveAspectRatio:'none' }, seg);
       parent = seg;
     }
   }

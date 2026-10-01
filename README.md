@@ -7,11 +7,11 @@ Guests first see a sealed gatefold envelope (rose vines, silk ribbon, wax seal).
 ## Files
 
 - `index.html` — the whole site (markup, styles, script, and the animated strands)
-- `art.jpg` — the painted background (1080×2308), cleaned from the original invitation photo after a 4× Real-ESRGAN upscale. The title area is blank so the names and date render as live text on top of it, and the stone archway continues behind the curtain.
-- `curtain.png` — the painted jasmine curtain cut out of the same upscaled photo. The page slices it into thin strips that swing from the crown of the arch when touched.
+- `art.jpg` — the illustrated background (1080×2308): the couple seated beneath a Mughal arch at sunset. The sky inside the arch is left clear so the names and date render as live text on top of it, and the marble steps continue behind the garland pillar.
+- `curtain.png` — the jasmine garland pillar cut out of the same illustration. The page slices it into thin strips that swing apart from the top when touched.
 - `.nojekyll` — tells GitHub Pages to serve the folder as-is
 
-To use different artwork, replace `art.jpg` with a 1080×2308 image (or any portrait image with the same 540:1154 proportions) whose top third is clear enough to hold the text.
+To use different artwork, replace `art.jpg` with a 1080×2308 image (or any portrait image with the same 540:1154 proportions) whose upper middle (the sky inside the arch) is clear enough to hold the text.
 
 ## Filling in your details
 

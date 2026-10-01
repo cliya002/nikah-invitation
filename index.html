@@ -54,14 +54,14 @@ button{font-family:inherit}
 /* Hit target + hint */
 #hit{cursor:pointer;outline:none}
 #hit:focus-visible rect{stroke:#fff;stroke-width:2;stroke-dasharray:6 6}
-#hint{pointer-events:none;transition:opacity .6s}
+#hint{pointer-events:none;transition:opacity .6s;filter:drop-shadow(0 0 2px #5a1c20)}
 .card.opened #hint{opacity:0}
 #hint text{font:500 14px "Cormorant Garamond",serif;letter-spacing:3px;text-transform:uppercase;fill:#fff;
   paint-order:stroke;stroke:#5a1c20aa;stroke-width:3.5px;stroke-linejoin:round}
-#hint .ring{fill:none;stroke:#fff;stroke-width:1.5;animation:ring 2.2s ease-out infinite}
+#hint .ring{fill:none;stroke:#f3a7b6;stroke-width:1.8;animation:ring 2.2s ease-out infinite}
 #hint .ring2{animation-delay:1.1s}
 @keyframes ring{0%{r:4;opacity:.9}100%{r:28;opacity:0}}
-#hint .dot{fill:#fff;animation:dot 2.2s ease-in-out infinite}
+#hint .dot{fill:#e5637f;stroke:#fff;stroke-width:1.2;animation:dot 2.2s ease-in-out infinite}
 @keyframes dot{0%,100%{r:4}50%{r:6}}
 
 /* ---------- Petals ---------- */
@@ -88,22 +88,22 @@ button{font-family:inherit}
 
 /* ---------- Text, placed in the cleared panel at the top of the artwork ---------- */
 .header{
-  position:absolute;left:0;right:0;top:11.5%;text-align:center;z-index:5;padding:0 12%;pointer-events:none;
-  color:#6b4a40;
+  position:absolute;left:0;right:0;top:14.5%;text-align:center;z-index:5;padding:0 28.5%;pointer-events:none;
+  color:#fff7ee;text-shadow:0 1px 2px #5a241a,0 0 14px #7a2a20aa;
 }
-.bismillah{font-family:Amiri,serif;font-size:6.2cqw;line-height:1.4;margin:0;color:#6b4a40}
-.orn{width:44%;height:1px;background:linear-gradient(90deg,transparent,#8d6a5c,transparent);margin:1.4cqw auto;position:relative}
-.orn:after{content:"✦";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:2.4cqw;color:#8d6a5c;background:transparent}
-.kicker{font-size:2.9cqw;letter-spacing:.45em;text-transform:uppercase;margin:1.2cqw 0 1cqw;color:#7a5a50}
+.bismillah{font-family:Amiri,serif;font-size:5.2cqw;line-height:1.4;margin:0;color:#fff7ee}
+.orn{width:60%;height:1px;background:linear-gradient(90deg,transparent,#fff7ee,transparent);margin:1.2cqw auto;position:relative}
+.orn:after{content:"✦";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:2.4cqw;color:#fff7ee;background:transparent}
+.kicker{font-size:2.6cqw;letter-spacing:.4em;text-transform:uppercase;margin:1cqw 0 .6cqw;color:#fff7ee}
 .names{
-  font-family:"Great Vibes",cursive;font-weight:400;font-size:10.5cqw;line-height:1.05;margin:0;
-  color:var(--rose);text-shadow:0 1px 0 #fff9;
+  font-family:"Great Vibes",cursive;font-weight:400;font-size:9.5cqw;line-height:1.05;margin:0;
+  color:#fff;text-shadow:0 1px 2px #5a241a,0 0 14px #7a2a20aa;
 }
-.names .blank{display:inline-block;min-width:24cqw;border-bottom:1px solid var(--rose);vertical-align:bottom;height:.85em}
+.names .blank{display:inline-block;min-width:26cqw;border-bottom:1px solid #fff;vertical-align:bottom;height:.85em}
 .names .nm{white-space:nowrap}
-.names .amp{font-size:.75em;color:#a77764;margin:0 .15em;font-family:"Cormorant Garamond",serif;font-style:italic}
+.names .amp{display:block;font-size:.6em;line-height:1;color:#fff7ee;margin:.1em 0;font-family:"Cormorant Garamond",serif;font-style:italic}
 .when{
-  font-size:3.4cqw;letter-spacing:.2em;text-transform:uppercase;color:#7a5a50;margin-top:3.2cqw;
+  font-size:3cqw;letter-spacing:.2em;text-transform:uppercase;color:#fff7ee;margin-top:2.4cqw;
   opacity:0;transform:translateY(6px);transition:opacity 1s 1.2s,transform 1s 1.2s;
 }
 .card.ready .when{opacity:1;transform:none}
@@ -246,13 +246,13 @@ button{font-family:inherit}
 /* text sequence inside the cleared panel: lines take turns, final block stays */
 .header{display:grid;place-items:center}
 .header>*{grid-area:1/1;width:100%}
-.line{opacity:0;transform:translateY(10px);transition:opacity 1s,transform 1s;color:#6b4a40;font-size:4.2cqw;line-height:1.5;font-style:italic;padding:0 6%;text-wrap:balance}
-.line .ar{display:block;font-family:Amiri,serif;font-style:normal;font-size:7cqw;line-height:1.5;margin-bottom:1.5cqw}
+.line{opacity:0;transform:translateY(10px);transition:opacity 1s,transform 1s;color:#fff7ee;font-size:3.6cqw;line-height:1.5;font-style:italic;padding:0 2%;text-wrap:balance}
+.line .ar{display:block;font-family:Amiri,serif;font-style:normal;font-size:5.6cqw;line-height:1.5;margin-bottom:1.2cqw}
 .line.on{opacity:1;transform:none}
 .line.off{opacity:0;transform:translateY(-10px)}
 .final{opacity:0;transform:translateY(10px);transition:opacity 1.2s,transform 1.2s}
 .final.on{opacity:1;transform:none}
-.final .bismillah{font-size:5.4cqw}
+.final .bismillah{font-size:4.8cqw}
 #hint,.card>img,.overlay{opacity:0;transition:opacity 1.2s}
 .card.live>img,.card.live .overlay{opacity:1}
 .card.live.ready #hint{opacity:1}
@@ -267,7 +267,7 @@ button{font-family:inherit}
 
 <main class="stage">
   <section class="card" id="card" aria-label="Nikah invitation">
-    <img src="art.jpg?v=8" alt="A bride and groom seated beside a tall archway of red roses in a Mughal garden">
+    <img src="art.jpg?v=9" alt="A bride and groom seated either side of a jasmine garland pillar beneath a Mughal arch at sunset">
 
     <svg class="overlay" viewBox="0 0 540 1154" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs id="defs">
@@ -278,12 +278,12 @@ button{font-family:inherit}
         </linearGradient>
       </defs>
       <g id="curtain"></g>
-      <g id="hint" transform="translate(262 880)">
+      <g id="hint" transform="translate(281 740)">
         <circle class="ring" r="4"/><circle class="ring ring2" r="4"/><circle class="dot" r="4"/>
         <text y="46" text-anchor="middle">touch the flowers</text>
       </g>
       <g id="hit" role="button" tabindex="0" aria-label="Touch the flowers to open the invitation">
-        <rect x="153" y="530" width="230" height="600" rx="115" fill="transparent"/>
+        <rect x="200" y="400" width="160" height="580" rx="80" fill="transparent"/>
       </g>
     </svg>
 
@@ -593,10 +593,10 @@ const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 42
 
 (function buildStrands(){
   // curtain.png is the painted curtain cropped from the artwork at this box (artwork px)
-  const X0 = 161, Y0 = 630, W = 214, H = 516;
-  const CX = 268, CY = 636;                 // crown of the arch: every strip swings from here
-  const n = 28, step = W / n, overlap = step * .9;   // strand-width strips with soft overlapping edges
-  const JOINTS = [Y0, 790, 950, Y0 + H];             // each strip is three hinged segments so it droops in a curve
+  const X0 = 220, Y0 = 416, W = 120, H = 544;
+  const CX = 281, CY = 420;                 // crown of the pillar: every strip swings from here
+  const n = 16, step = W / n, overlap = step * .9;   // strand-width strips with soft overlapping edges
+  const JOINTS = [Y0, 600, 780, Y0 + H];             // each strip is three hinged segments so it droops in a curve
   const defs = $('defs'), g = $('curtain');
   for (let i = 0; i < n; i++){
     const x = X0 + i*step - overlap/2, w = step + overlap, xc = X0 + (i + .5)*step;
@@ -606,8 +606,8 @@ const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 42
     const f = 1 - Math.abs(c)*2;                                 // 1 at centre .. 0 at the edge
     // NB: SVG rotate() with a positive angle swings a hanging strip to the LEFT, hence -side
     // modest swing so the curtain parts like tied-back drapes instead of lying flat across the scene
-    // kept small enough that the gathered strands settle against the rose rim, never over the couple
-    const a1 = -side * (12 + f*12) + (rnd()-.5)*1.5;
+    // kept small enough that the parted garlands stay between the couple instead of across their faces
+    const a1 = -side * (10 + f*9) + (rnd()-.5)*1.5;
     const dl = (Math.abs(c)*.5 + rnd()*.08).toFixed(2);     // opens from the middle outward like a wave
     let parent = g;
     for (let k = 0; k < 3; k++){
@@ -616,7 +616,7 @@ const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 42
       mk('rect', { x, y, width:w, height:h, fill:'url(#feather)' }, mask);
       const ox = k ? xc : CX, oy = k ? JOINTS[k] : CY;         // top segment swings from the crown, lower ones from the joint above
       const seg = mk('g', { class: k ? 'joint' : 'strand', style:`transform-origin:${ox.toFixed(1)}px ${oy}px;--a1:${a1.toFixed(1)}deg;--dl:${dl}s` }, parent);
-      mk('image', { href:'curtain.png?v=8', x:X0, y:Y0, width:W, height:H, mask:`url(#m${i}_${k})`, preserveAspectRatio:'none' }, seg);
+      mk('image', { href:'curtain.png?v=9', x:X0, y:Y0, width:W, height:H, mask:`url(#m${i}_${k})`, preserveAspectRatio:'none' }, seg);
       parent = seg;
     }
   }

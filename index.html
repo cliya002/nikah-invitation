@@ -1,0 +1,707 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#e6cfc2">
+<meta name="description" content="Nikah invitation">
+<title>Nikah Invitation</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f3e6da; --rose:#9b2a30; --rose2:#7b1f26; --ink:#5d403a; --ink2:#7d5a52; --line:#c6a08d;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;min-height:100svh;background:#1a1212;color:var(--ink);
+  font-family:"Cormorant Garamond",Georgia,serif;
+  background-image:radial-gradient(ellipse at 50% 0%,#3a2626 0%,#1a1212 60%);
+}
+button{font-family:inherit}
+[hidden]{display:none!important}
+.stage{min-height:100svh;display:grid;place-items:center}
+
+/* ---------- Card: sized to the artwork (540 x 1154) ---------- */
+.card{
+  position:relative;width:100vw;height:100svh;overflow:hidden;background:#e9d6c8;
+  box-shadow:0 0 90px #000a;-webkit-tap-highlight-color:transparent;
+  container-type:inline-size;
+}
+@media(min-width:560px){
+  .stage{padding:24px}
+  /* capped so the artwork is not enlarged much beyond its native size on large screens */
+  .card{width:auto;height:min(820px,calc(100svh - 48px));aspect-ratio:540/1154;border:1px solid #cfae9a}
+}
+.card>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
+.overlay{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* ---------- Strands (SVG overlay, same cover-fit as the image) ---------- */
+#curtain{transform-origin:268px 636px;animation:sway 6s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1deg)}}
+.card.opened #curtain{animation:none}
+/* the curtain is the real painted jasmine, sliced into strips that swing from the crown of the arch */
+.strand{transform:rotate(0deg);transition:transform 2.4s cubic-bezier(.22,.8,.25,1.02) var(--dl);will-change:transform}
+.card.opened .strand{transform:rotate(var(--a1))}
+/* lower segments swing back toward vertical, so the strand bows and droops under its own weight */
+.joint{transform:rotate(0deg);transition:transform 2.4s cubic-bezier(.3,.75,.3,1.04) calc(var(--dl) + .1s);will-change:transform}
+.card.opened .joint{transform:rotate(calc(var(--a1) * -.3))}
+.strand image{image-rendering:auto}
+
+/* Hit target + hint */
+#hit{cursor:pointer;outline:none}
+#hit:focus-visible rect{stroke:#fff;stroke-width:2;stroke-dasharray:6 6}
+#hint{pointer-events:none;transition:opacity .6s}
+.card.opened #hint{opacity:0}
+#hint text{font:500 14px "Cormorant Garamond",serif;letter-spacing:3px;text-transform:uppercase;fill:#fff;
+  paint-order:stroke;stroke:#5a1c20aa;stroke-width:3.5px;stroke-linejoin:round}
+#hint .ring{fill:none;stroke:#fff;stroke-width:1.5;animation:ring 2.2s ease-out infinite}
+#hint .ring2{animation-delay:1.1s}
+@keyframes ring{0%{r:4;opacity:.9}100%{r:28;opacity:0}}
+#hint .dot{fill:#fff;animation:dot 2.2s ease-in-out infinite}
+@keyframes dot{0%,100%{r:4}50%{r:6}}
+
+/* ---------- Petals ---------- */
+.petals{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:3}
+.petal{
+  position:absolute;top:-30px;width:11px;height:15px;border-radius:60% 60% 60% 60%/70% 70% 40% 40%;
+  background:radial-gradient(circle at 30% 30%,#e9707a,#a4282f);opacity:0;
+  animation:fall var(--d) linear var(--delay) infinite;
+}
+@keyframes fall{
+  0%{transform:translate3d(0,-30px,0) rotate(0);opacity:0}
+  8%{opacity:.85}
+  100%{transform:translate3d(var(--x),105vh,0) rotate(420deg);opacity:0}
+}
+.burst{
+  position:absolute;width:10px;height:13px;border-radius:60% 60% 60% 60%/70% 70% 40% 40%;
+  background:radial-gradient(circle at 30% 30%,#f39aa2,#a4282f);
+  animation:burst 1.6s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes burst{
+  0%{transform:translate(0,0) rotate(0);opacity:1}
+  100%{transform:translate(var(--bx),var(--by)) rotate(var(--br));opacity:0}
+}
+
+/* ---------- Text, placed in the cleared panel at the top of the artwork ---------- */
+.header{
+  position:absolute;left:0;right:0;top:11.5%;text-align:center;z-index:5;padding:0 12%;pointer-events:none;
+  color:#6b4a40;
+}
+.bismillah{font-family:Amiri,serif;font-size:6.2cqw;line-height:1.4;margin:0;color:#6b4a40}
+.orn{width:44%;height:1px;background:linear-gradient(90deg,transparent,#8d6a5c,transparent);margin:1.4cqw auto;position:relative}
+.orn:after{content:"✦";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:2.4cqw;color:#8d6a5c;background:transparent}
+.kicker{font-size:2.9cqw;letter-spacing:.45em;text-transform:uppercase;margin:1.2cqw 0 1cqw;color:#7a5a50}
+.names{
+  font-family:"Great Vibes",cursive;font-weight:400;font-size:10.5cqw;line-height:1.05;margin:0;
+  color:var(--rose);text-shadow:0 1px 0 #fff9;
+}
+.names .blank{display:inline-block;min-width:24cqw;border-bottom:1px solid var(--rose);vertical-align:bottom;height:.85em}
+.names .nm{white-space:nowrap}
+.names .amp{font-size:.75em;color:#a77764;margin:0 .15em;font-family:"Cormorant Garamond",serif;font-style:italic}
+.when{
+  font-size:3.4cqw;letter-spacing:.2em;text-transform:uppercase;color:#7a5a50;margin-top:3.2cqw;
+  opacity:0;transform:translateY(6px);transition:opacity 1s 1.2s,transform 1s 1.2s;
+}
+.card.ready .when{opacity:1;transform:none}
+
+/* Bottom action, over the lawn */
+.info{
+  position:absolute;z-index:5;left:0;right:0;bottom:2.6%;text-align:center;
+  opacity:0;transform:translateY(12px);transition:opacity 1s 1.4s,transform 1s 1.4s;pointer-events:none;
+}
+.card.revealed .info{opacity:1;transform:none;pointer-events:auto}
+
+.btn{
+  border:1px solid #8b403d;background:#8f2d33;color:#fff;
+  padding:12px 26px;border-radius:999px;font:500 17px "Cormorant Garamond",serif;
+  box-shadow:0 8px 22px #3a121540;cursor:pointer;transition:.25s;letter-spacing:.3px;text-decoration:none;display:inline-block;
+}
+.btn:hover{transform:translateY(-2px);background:#762228}
+.btn.ghost{background:#fff9;color:var(--rose2);border-color:#a97861;backdrop-filter:blur(6px)}
+.btn.ghost:hover{background:#fff}
+.btn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+
+/* ---------- Details sheet ---------- */
+.details{
+  position:fixed;inset:0;z-index:40;background:var(--paper);overflow:auto;
+  transform:translateY(100%);transition:transform .7s cubic-bezier(.2,.8,.2,1);
+  background-image:radial-gradient(ellipse at 50% 0%,#fff3ea,#f3e6da 55%);
+}
+.details.show{transform:none}
+.details-inner{width:min(680px,100%);margin:auto;padding:76px 24px 64px;text-align:center}
+.close{
+  position:fixed;top:16px;right:16px;width:44px;height:44px;border-radius:50%;
+  border:1px solid #9b6d5e;background:#ffffffcc;color:var(--rose2);font-size:24px;cursor:pointer;z-index:2;
+}
+.details h2{font-family:"Great Vibes",cursive;font-weight:400;font-size:clamp(44px,12vw,66px);color:var(--rose);margin:8px 0;line-height:1.1}
+.details h2 .blank{display:inline-block;min-width:120px;border-bottom:1px solid var(--rose);vertical-align:bottom;height:.85em}
+.details h2 .nm{white-space:nowrap}
+.details h2 .amp{font-size:.75em;color:#a77764;margin:0 .15em;font-family:"Cormorant Garamond",serif;font-style:italic}
+.details .arabic{font-family:Amiri,serif;font-size:28px;line-height:1.7;margin:8px auto;color:#7d514a}
+.rule{width:90px;height:1px;background:var(--line);margin:8px auto}
+.lead{font-size:20px;line-height:1.45;margin:8px auto;max-width:520px}
+.hosts{font-size:17px;color:var(--ink2);font-style:italic;margin:6px 0 0}
+.grid{display:grid;gap:14px;grid-template-columns:1fr;margin:34px 0 26px}
+@media(min-width:520px){.grid{grid-template-columns:repeat(3,1fr)}}
+.grid>div{padding:16px 10px;border:1px solid var(--line);background:#fff5ee99;border-radius:4px;min-width:0}
+.label{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;opacity:.7}
+.value{font-size:20px;margin-top:5px;line-height:1.2}
+.countdown{display:flex;justify-content:center;gap:10px;margin:8px 0 26px;flex-wrap:wrap}
+.countdown div{min-width:66px;padding:10px 6px;border-radius:4px;background:#8f2d33;color:#fff}
+.countdown b{display:block;font-size:26px;font-weight:600;line-height:1}
+.countdown span{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.85}
+.section{margin:30px 0}
+.section h3{font-family:"Great Vibes",cursive;font-weight:400;font-size:38px;color:var(--rose);margin:0 0 6px}
+.section p{font-size:18px;margin:4px 0;line-height:1.4}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.actions .btn{font-size:16px;padding:10px 20px}
+.footer{margin-top:40px;font-size:15px;color:var(--ink2);font-style:italic}
+
+/* ---------- RSVP form ---------- */
+.rsvp{max-width:440px;margin:18px auto 0;text-align:left;display:grid;gap:14px}
+.rsvp .field{display:grid;gap:6px}
+.rsvp .field>span{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--ink2)}
+.rsvp .field em{font-style:italic;text-transform:none;letter-spacing:0;opacity:.8}
+.rsvp input[type=text],.rsvp input[type=tel],.rsvp select,.rsvp textarea{
+  width:100%;font:inherit;font-size:18px;color:var(--ink);padding:11px 14px;border-radius:4px;
+  border:1px solid var(--line);background:#fffaf5;outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.rsvp textarea{resize:vertical;min-height:58px}
+.rsvp select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink2) 50%),linear-gradient(135deg,var(--ink2) 50%,transparent 50%);
+  background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:38px}
+.rsvp :is(input,select,textarea):focus{border-color:var(--rose);box-shadow:0 0 0 3px #9b2a3022}
+.rsvp .invalid{border-color:#b3242c!important;background:#fff3f3}
+.rsvp .row{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:420px){.rsvp .row{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}}
+.rsvp .choice{border:0;padding:0;margin:0;display:grid;gap:8px}
+.rsvp .choice legend{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--ink2);margin-bottom:8px;padding:0}
+.rsvp .choice label{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--line);border-radius:4px;background:#fffaf5;cursor:pointer;font-size:18px;transition:.2s}
+.rsvp .choice label:has(:checked){border-color:var(--rose);background:#fff1ee;color:var(--rose2)}
+.rsvp .choice input{accent-color:var(--rose);width:18px;height:18px;margin:0}
+.rsvp .choice.invalid label{border-color:#b3242c}
+.rsvp .actions{margin-top:4px}
+.rsvp .btn[disabled]{opacity:.6;cursor:progress;transform:none}
+.rsvp .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.rsvp .status{min-height:1.4em;margin:0;font-size:15px;color:var(--ink2);text-align:center}
+.rsvp .status.err{color:#b3242c}
+.deadline{font-size:14px;color:var(--ink2);font-style:italic;margin:8px 0 0}
+.thanks{margin-top:18px}
+.thanks-title{font-family:"Great Vibes",cursive;font-size:52px;color:var(--rose);margin:0 0 4px;line-height:1.1}
+.thanks p{font-size:18px}
+
+/* ---------- Envelope: scalloped gatefold with rose vines, silk ribbon, wax seal ---------- */
+.env{position:absolute;inset:0;z-index:30;perspective:1400px;cursor:pointer;-webkit-tap-highlight-color:transparent;outline:none;
+  /* climbing rose vines: a lattice of curling stems, burgundy roses and buds, grey-green leaves */
+  --vines:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23897a68' stroke-width='.9' stroke-linecap='round'%3E%3Cpath d='M0 50 C15 30 25 25 35 42 S55 60 50 80 S40 100 50 100'/%3E%3Cpath d='M50 0 C45 15 55 25 65 25 S90 35 100 50'/%3E%3Cpath d='M100 50 C85 70 75 75 65 58 S45 40 50 20'/%3E%3Cpath d='M35 42 C30 50 20 55 10 70'/%3E%3Cpath d='M65 58 C72 68 82 72 92 88'/%3E%3Cpath d='M0 0 C10 10 15 20 12 30'/%3E%3Cpath d='M100 100 C90 92 85 82 88 70'/%3E%3C/g%3E%3Cg fill='%237f8c69'%3E%3Cellipse cx='22' cy='33' rx='4.5' ry='1.9' transform='rotate(-40 22 33)'/%3E%3Cellipse cx='44' cy='52' rx='4.5' ry='1.9' transform='rotate(35 44 52)'/%3E%3Cellipse cx='58' cy='18' rx='4' ry='1.7' transform='rotate(-20 58 18)'/%3E%3Cellipse cx='80' cy='37' rx='4.5' ry='1.9' transform='rotate(30 80 37)'/%3E%3Cellipse cx='74' cy='66' rx='4.5' ry='1.9' transform='rotate(-50 74 66)'/%3E%3Cellipse cx='15' cy='62' rx='4' ry='1.7' transform='rotate(-60 15 62)'/%3E%3Cellipse cx='55' cy='88' rx='4' ry='1.7' transform='rotate(40 55 88)'/%3E%3Cellipse cx='10' cy='22' rx='3.6' ry='1.6' transform='rotate(70 10 22)'/%3E%3Cellipse cx='90' cy='80' rx='3.6' ry='1.6' transform='rotate(70 90 80)'/%3E%3C/g%3E%3Cg%3E%3Ccircle cx='35' cy='42' r='5.2' fill='%23862831'/%3E%3Ccircle cx='35' cy='42' r='3.1' fill='%23a3434a'/%3E%3Ccircle cx='34' cy='41' r='1.3' fill='%23c46a70'/%3E%3Ccircle cx='65' cy='58' r='5.2' fill='%23862831'/%3E%3Ccircle cx='65' cy='58' r='3.1' fill='%23a3434a'/%3E%3Ccircle cx='64' cy='57' r='1.3' fill='%23c46a70'/%3E%3Ccircle cx='50' cy='80' r='3.6' fill='%238d2a33'/%3E%3Ccircle cx='50' cy='80' r='1.8' fill='%23b05058'/%3E%3Ccircle cx='65' cy='25' r='3.6' fill='%238d2a33'/%3E%3Ccircle cx='65' cy='25' r='1.8' fill='%23b05058'/%3E%3Ccircle cx='10' cy='70' r='2.4' fill='%23962d36'/%3E%3Ccircle cx='92' cy='88' r='2.4' fill='%23962d36'/%3E%3Ccircle cx='12' cy='30' r='2.4' fill='%23962d36'/%3E%3Ccircle cx='88' cy='70' r='2.4' fill='%23962d36'/%3E%3C/g%3E%3C/svg%3E");
+}
+.env:focus-visible .seal{box-shadow:0 0 0 4px #fff,0 10px 24px #00000055}
+.env.gone{display:none}
+.flap{
+  position:absolute;top:0;bottom:0;width:58%;background:#f4ebe0;
+  background-image:var(--vines),radial-gradient(ellipse at 50% 50%,#fbf5ee,#efe3d6);
+  background-size:22cqw 22cqw,auto;
+  box-shadow:0 0 40px #00000033;
+  transition:transform 1.6s cubic-bezier(.6,.05,.3,1) .55s,opacity .5s 1.9s;
+  backface-visibility:hidden;will-change:transform;
+}
+.flap.l{left:0;transform-origin:left center;
+  -webkit-mask:linear-gradient(#000,#000) left/calc(100% - 18px) 100% no-repeat,radial-gradient(circle at 18px 50%,#000 17px,transparent 18px) right/36px 36px repeat-y;
+  mask:linear-gradient(#000,#000) left/calc(100% - 18px) 100% no-repeat,radial-gradient(circle at 18px 50%,#000 17px,transparent 18px) right/36px 36px repeat-y;
+  mask-composite:add;-webkit-mask-composite:source-over}
+.flap.r{right:0;transform-origin:right center;
+  -webkit-mask:linear-gradient(#000,#000) right/calc(100% - 18px) 100% no-repeat,radial-gradient(circle at 18px 50%,#000 17px,transparent 18px) left/36px 36px repeat-y;
+  mask:linear-gradient(#000,#000) right/calc(100% - 18px) 100% no-repeat,radial-gradient(circle at 18px 50%,#000 17px,transparent 18px) left/36px 36px repeat-y;
+  mask-composite:add;-webkit-mask-composite:source-over}
+.flap:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#00000012,transparent 30%,transparent 70%,#00000012);pointer-events:none}
+.env.open .flap.l{transform:rotateY(-112deg)}
+.env.open .flap.r{transform:rotateY(112deg)}
+.env.open .flap{opacity:0}
+
+/* silk ribbon: a band across the fold, knotted under the seal, two tails trailing down to the left */
+.ribbon{position:absolute;left:-4%;right:-4%;top:46%;height:12cqw;transform:translateY(-50%) rotate(-2deg);
+  background:linear-gradient(180deg,#fcf6ee,#eadbcb 45%,#f7eee4 70%,#e9dacb);box-shadow:0 8px 18px #00000030,inset 0 1px 0 #fff;
+  transition:transform .9s cubic-bezier(.5,0,.8,.4) .2s,opacity .4s .7s}
+.ribbon:before,.ribbon:after{content:"";position:absolute;top:60%;width:12cqw;height:34cqw;
+  background:linear-gradient(90deg,#e6d6c6,#f9f1e8 40%,#eee1d2);box-shadow:0 10px 18px #00000026;
+  clip-path:polygon(15% 0,85% 0,100% 90%,70% 100%,40% 94%,0 100%)}
+.ribbon:before{left:calc(50% - 15cqw);transform:rotate(22deg);transform-origin:top center}
+.ribbon:after{left:calc(50% - 4cqw);transform:rotate(-16deg);transform-origin:top center;height:28cqw}
+.env.open .ribbon{transform:translateY(-50%) rotate(-2deg) scaleX(1.25);opacity:0}
+
+.seal{position:absolute;left:50%;top:46%;width:23cqw;height:23cqw;transform:translate(-50%,-50%) rotate(-8deg);border-radius:48% 52% 50% 50%/50% 48% 52% 50%;
+  background:radial-gradient(circle at 38% 32%,#b23a42,#7e1f26 60%,#5e161b);
+  box-shadow:0 10px 24px #00000055,inset 0 2px 3px #ffffff55,inset 0 -3px 6px #00000066;
+  display:grid;place-items:center;color:#8a2a31;font-size:10cqw;text-shadow:0 -1px 0 #4a0f13,0 1px 0 #c25a60;
+  transition:transform .5s cubic-bezier(.6,-.3,.7,1),opacity .4s .15s}
+.seal:before{content:"";position:absolute;inset:9%;border-radius:50%;border:1.5px solid #5a1217;box-shadow:inset 0 1px 0 #c4646a}
+.env.open .seal{transform:translate(-50%,-50%) scale(.3) rotate(40deg);opacity:0}
+.tap{position:absolute;left:0;right:0;top:calc(46% + 36cqw);text-align:center;font-size:3.2cqw;letter-spacing:.4em;text-transform:uppercase;color:#8a5f55;animation:pulse 2.4s ease-in-out infinite;transition:opacity .3s}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+.env.open .tap{opacity:0}
+
+/* text sequence inside the cleared panel: lines take turns, final block stays */
+.header{display:grid;place-items:center}
+.header>*{grid-area:1/1;width:100%}
+.line{opacity:0;transform:translateY(10px);transition:opacity 1s,transform 1s;color:#6b4a40;font-size:4.2cqw;line-height:1.5;font-style:italic;padding:0 6%;text-wrap:balance}
+.line .ar{display:block;font-family:Amiri,serif;font-style:normal;font-size:7cqw;line-height:1.5;margin-bottom:1.5cqw}
+.line.on{opacity:1;transform:none}
+.line.off{opacity:0;transform:translateY(-10px)}
+.final{opacity:0;transform:translateY(10px);transition:opacity 1.2s,transform 1.2s}
+.final.on{opacity:1;transform:none}
+.final .bismillah{font-size:5.4cqw}
+#hint,.card>img,.overlay{opacity:0;transition:opacity 1.2s}
+.card.live>img,.card.live .overlay{opacity:1}
+.card.live.ready #hint{opacity:1}
+.card.live.ready.opened #hint{opacity:0}
+
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<main class="stage">
+  <section class="card" id="card" aria-label="Nikah invitation">
+    <img src="art.jpg?v=5" alt="A bride and groom seated beside a tall archway of red roses in a Mughal garden">
+
+    <svg class="overlay" viewBox="0 0 540 1154" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs id="defs">
+        <!-- feathered edges for each curtain strip so neighbours blend -->
+        <linearGradient id="feather" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".4" stop-color="#fff"/>
+          <stop offset=".6" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <g id="curtain"></g>
+      <g id="hint" transform="translate(262 880)">
+        <circle class="ring" r="4"/><circle class="ring ring2" r="4"/><circle class="dot" r="4"/>
+        <text y="46" text-anchor="middle">touch the flowers</text>
+      </g>
+      <g id="hit" role="button" tabindex="0" aria-label="Touch the flowers to open the invitation">
+        <rect x="150" y="530" width="230" height="600" rx="115" fill="transparent"/>
+      </g>
+    </svg>
+
+    <div class="petals" id="petals" aria-hidden="true"></div>
+
+    <header class="header">
+      <div class="line" id="l1"><span class="ar" lang="ar" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</span>In the name of Allah,<br>The Most Gracious and The Most Merciful</div>
+      <div class="line" id="l2">A beautiful chapter of our lives is about to begin, and we would be honoured to have you with us.</div>
+      <div class="line" id="l3"></div>
+      <div class="final" id="final">
+        <p class="bismillah" lang="ar" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
+        <div class="orn"></div>
+        <div class="kicker">To the Nikkah of</div>
+        <h1 class="names" id="namesCard"></h1>
+        <div class="when" id="whenCard"></div>
+      </div>
+    </header>
+
+    <!-- sealed envelope, shown first -->
+    <div class="env" id="env" role="button" tabindex="0" aria-label="Open the invitation">
+      <div class="flap l"></div>
+      <div class="flap r"></div>
+      <div class="ribbon"></div>
+      <div class="seal" aria-hidden="true">♥</div>
+      <div class="tap">tap to open</div>
+    </div>
+
+    <div class="info">
+      <button class="btn ghost" id="detailsBtn">View invitation details</button>
+    </div>
+  </section>
+</main>
+
+<section class="details" id="details" aria-hidden="true">
+  <button class="close" id="closeBtn" aria-label="Close details">×</button>
+  <div class="details-inner">
+    <p class="arabic" lang="ar" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
+    <h2 id="namesDetails"></h2>
+    <div class="rule"></div>
+    <p class="hosts" id="hosts"></p>
+    <p class="lead">With hearts full of gratitude to Allah, we invite you to join us as we begin our journey together.</p>
+
+    <div class="grid">
+      <div><div class="label">Ceremony</div><div class="value">Nikkah</div></div>
+      <div><div class="label">Date</div><div class="value" id="dateVal"></div></div>
+      <div><div class="label">Time</div><div class="value" id="timeVal"></div></div>
+    </div>
+
+    <div class="countdown" id="countdown" hidden>
+      <div><b id="cdD">0</b><span>days</span></div>
+      <div><b id="cdH">0</b><span>hours</span></div>
+      <div><b id="cdM">0</b><span>mins</span></div>
+      <div><b id="cdS">0</b><span>secs</span></div>
+    </div>
+
+    <div class="section">
+      <h3>Venue</h3>
+      <p id="venueName"></p>
+      <p id="venueAddr" style="color:var(--ink2)"></p>
+      <div class="actions">
+        <a class="btn ghost" id="mapBtn" target="_blank" rel="noopener" hidden>Open in Maps</a>
+        <button class="btn ghost" id="calBtn" hidden>Add to Calendar</button>
+      </div>
+    </div>
+
+    <div class="section" id="rsvpSection">
+      <h3>RSVP</h3>
+      <p id="rsvpText">Kindly let us know if you can join us.</p>
+
+      <!-- in-page form: shown when CONFIG.rsvpEndpoint is set -->
+      <form class="rsvp" id="rsvpForm" novalidate hidden>
+        <label class="field">
+          <span>Your name</span>
+          <input type="text" name="name" id="rsvpName" autocomplete="name" maxlength="80" required placeholder="e.g. Ahmed & family">
+        </label>
+
+        <fieldset class="choice" id="rsvpChoice">
+          <legend>Will you be joining us?</legend>
+          <label><input type="radio" name="attending" value="Yes" required><span>Joyfully accept</span></label>
+          <label><input type="radio" name="attending" value="No"><span>Regretfully decline</span></label>
+        </fieldset>
+
+        <div class="row" id="rsvpYesOnly">
+          <label class="field small">
+            <span>Guests (including you)</span>
+            <select name="guests" id="rsvpGuests"></select>
+          </label>
+          <label class="field">
+            <span>Phone <em>(optional)</em></span>
+            <input type="tel" name="phone" id="rsvpPhone" autocomplete="tel" maxlength="30" placeholder="so we can reach you">
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Message or dietary needs <em>(optional)</em></span>
+          <textarea name="message" id="rsvpMessage" rows="2" maxlength="400" placeholder="A note for the couple"></textarea>
+        </label>
+
+        <!-- honeypot: real guests never see this; bots fill it in -->
+        <input type="text" name="website" id="rsvpHp" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
+
+        <div class="actions">
+          <button type="submit" class="btn" id="rsvpSend">Send RSVP</button>
+        </div>
+        <p class="status" id="rsvpStatus" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="thanks" id="rsvpThanks" hidden>
+        <p class="thanks-title">Thank you</p>
+        <p id="rsvpThanksText"></p>
+        <button type="button" class="btn ghost" id="rsvpEdit">Change my reply</button>
+      </div>
+
+    </div>
+
+    <p class="footer">Your presence and prayers would mean the world to us.</p>
+    <button class="btn ghost" id="backBtn">Back to Invitation</button>
+  </div>
+</section>
+
+<script>
+/* =========================================================
+   EDIT THIS BLOCK — everything on the page reads from here.
+   Leave a string empty ("") to show a blank line instead.
+   ========================================================= */
+const CONFIG = {
+  groom: "",                 // e.g. "Muhammad"
+  bride: "",                 // e.g. "Dr. Fatimah"
+  hosts: "",                 // e.g. "Mr. & Mrs. Ahmed invite you to the Nikkah of their beloved children"
+
+  dateText: "Date to be announced",   // e.g. "Sunday, 26 October 2026"
+  timeText: "Time to be announced",   // e.g. "6:00 PM"
+  eventISO: "",              // for countdown + calendar, e.g. "2026-10-26T18:00:00" (local time). Leave "" to hide.
+  durationHours: 3,
+
+  venueName: "Venue to be announced",
+  venueAddress: "",          // e.g. "123 Main St, City"
+  mapsUrl: "",               // e.g. "https://maps.google.com/?q=..." Leave "" to hide button.
+
+  // RSVP — paste the Google Apps Script "Web app" URL here (see README, "RSVP tracking").
+  // When set, guests reply inside the card and each reply lands in your Google Sheet.
+  rsvpEndpoint: "https://script.google.com/macros/s/AKfycbxmq55uHYI7YVCgOWArgP-N1WdYqI6FFkicWUfbfvyShn5wKfRfwmPA0q4szouh385V/exec",
+  rsvpMaxGuests: 6,          // largest party size a guest can pick
+  rsvpDeadline: "",          // e.g. "15 October 2026" — shown under the form. Leave "" to hide.
+  rsvpUrl: "",               // optional fallback while no endpoint is set: "mailto:you@example.com" sends replies by email.
+  rsvpText: "Kindly let us know if you can join us."
+};
+
+/* ---------- rendering ---------- */
+const $ = id => document.getElementById(id);
+const escapeHtml = s => s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const blank = s => s ? `<span class="nm">${escapeHtml(s)}</span>` : `<span class="blank" aria-label="name"></span>`;
+const renderNames = el => { el.innerHTML = `${blank(CONFIG.groom)} <span class="amp">&amp;</span> ${blank(CONFIG.bride)}`; };
+renderNames($('namesCard'));
+renderNames($('namesDetails'));
+
+$('whenCard').textContent = CONFIG.dateText;
+$('hosts').textContent = CONFIG.hosts;
+$('hosts').hidden = !CONFIG.hosts;
+$('dateVal').textContent = CONFIG.dateText;
+$('timeVal').textContent = CONFIG.timeText;
+$('venueName').textContent = CONFIG.venueName;
+$('venueAddr').textContent = CONFIG.venueAddress;
+$('rsvpText').textContent = CONFIG.rsvpText;
+if (CONFIG.mapsUrl){ $('mapBtn').href = CONFIG.mapsUrl; $('mapBtn').hidden = false; }
+
+
+/* ---------- RSVP form → Google Sheet (via Apps Script) ---------- */
+(function rsvp(){
+  const form = $('rsvpForm'), status = $('rsvpStatus'), send = $('rsvpSend'), thanks = $('rsvpThanks');
+  const KEY = 'nikah-rsvp';
+  const mailto = /^mailto:/i.test(CONFIG.rsvpUrl || '') ? CONFIG.rsvpUrl : '';
+  form.hidden = false;
+
+  // party-size options
+  const sel = $('rsvpGuests');
+  for (let i = 1; i <= Math.max(1, CONFIG.rsvpMaxGuests|0); i++){
+    const o = document.createElement('option'); o.value = i; o.textContent = i; sel.appendChild(o);
+  }
+  if (CONFIG.rsvpDeadline){
+    const p = document.createElement('p'); p.className = 'deadline';
+    p.textContent = `Kindly reply by ${CONFIG.rsvpDeadline}.`;
+    form.appendChild(p);
+  }
+
+  // guests/phone only matter when accepting
+  const yesOnly = $('rsvpYesOnly');
+  const syncYesOnly = () => { const v = form.attending.value; yesOnly.hidden = v === 'No'; };
+  form.addEventListener('change', e => { if (e.target.name === 'attending') syncYesOnly(); });
+  // clear the error state as soon as the guest starts fixing it
+  form.addEventListener('input', () => { mark($('rsvpName'), false); mark($('rsvpChoice'), false); if (status.classList.contains('err')) setStatus(''); });
+
+  // if this device already replied, show the thank-you with an option to change
+  let saved = (() => { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { return null; } })();
+  const showThanks = d => {
+    $('rsvpThanksText').textContent = d.attending === 'Yes'
+      ? `${d.name}, we can't wait to celebrate with you${d.guests > 1 ? ` and your party of ${d.guests}` : ''}.`
+      : `${d.name}, you'll be missed. Thank you for letting us know.`;
+    form.hidden = true; thanks.hidden = false;
+  };
+  if (saved && saved.name) showThanks(saved);
+  $('rsvpEdit').addEventListener('click', () => {
+    if (saved){
+      form.name.value = saved.name || ''; form.phone.value = saved.phone || ''; form.message.value = saved.message || '';
+      if (saved.attending){ form.querySelector(`input[name=attending][value=${saved.attending}]`).checked = true; }
+      if (saved.guests) sel.value = String(saved.guests);
+      syncYesOnly();
+    }
+    thanks.hidden = true; form.hidden = false; form.name.focus();
+  });
+
+  const setStatus = (msg, err) => { status.textContent = msg; status.classList.toggle('err', !!err); };
+  const mark = (el, bad) => el.classList.toggle('invalid', bad);
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if ($('rsvpHp').value) return;                               // bot
+    const name = form.name.value.trim(), attending = form.attending.value;
+    mark($('rsvpName'), !name); mark($('rsvpChoice'), !attending);
+    if (!name || !attending){ setStatus('Please add your name and let us know if you can join.', true); return; }
+
+    const data = {
+      name, attending,
+      guests: attending === 'Yes' ? Number(sel.value) || 1 : 0,
+      phone: form.phone.value.trim(),
+      message: form.message.value.trim(),
+      source: location.href.split('?')[0]
+    };
+    send.disabled = true; setStatus('Sending…');
+    try {
+      await submitRsvp(data);
+      try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {}
+      saved = data;
+      setStatus('');
+      showThanks(data);
+    } catch (err){
+      const notSetUp = /not connected/.test(String(err && err.message));
+      setStatus(notSetUp ? 'Replies are not being collected yet. Add your Google Sheet link to rsvpEndpoint in CONFIG (see README).'
+                         : 'Sorry, that did not go through. Please check your connection and try again.', true);
+    } finally { send.disabled = false; }
+  });
+
+  async function submitRsvp(data){
+    if (!CONFIG.rsvpEndpoint){
+      // Not connected to a sheet yet. If an email address is configured, hand the reply to the
+      // guest's mail app; otherwise tell the owner what is missing (guests will never see this once set up).
+      if (mailto){
+        const lines = [`Name: ${data.name}`, `Attending: ${data.attending}`, data.guests ? `Guests: ${data.guests}` : '', data.phone ? `Phone: ${data.phone}` : '', data.message ? `Message: ${data.message}` : ''].filter(Boolean);
+        const sep = mailto.includes('?') ? '&' : '?';
+        location.href = `${mailto}${sep}subject=${encodeURIComponent('RSVP: ' + data.name)}&body=${encodeURIComponent(lines.join('\n'))}`;
+        return;
+      }
+      throw new Error('RSVP is not connected yet: set rsvpEndpoint in CONFIG (see README).');
+    }
+    const body = JSON.stringify(data);
+    // Apps Script answers simple POSTs with CORS headers, so we can usually read the reply…
+    try {
+      const r = await fetch(CONFIG.rsvpEndpoint, { method:'POST', body, headers:{ 'Content-Type':'text/plain;charset=utf-8' }, redirect:'follow' });
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.error || 'Sheet rejected the reply');
+      return;
+    } catch (err){
+      if (!(err instanceof TypeError)) throw err;              // real failure reported by the script
+    }
+    // …but if the browser blocks the read, send it opaque: the row still lands in the sheet.
+    await fetch(CONFIG.rsvpEndpoint, { method:'POST', mode:'no-cors', body, headers:{ 'Content-Type':'text/plain;charset=utf-8' } });
+  }
+})();
+
+/* ---------- countdown + calendar ---------- */
+const eventDate = CONFIG.eventISO ? new Date(CONFIG.eventISO) : null;
+if (eventDate && !isNaN(eventDate)){
+  $('countdown').hidden = false;
+  $('calBtn').hidden = false;
+  const tick = () => {
+    const diff = Math.max(0, eventDate - Date.now());
+    $('cdD').textContent = Math.floor(diff/864e5);
+    $('cdH').textContent = Math.floor(diff/36e5)%24;
+    $('cdM').textContent = Math.floor(diff/6e4)%60;
+    $('cdS').textContent = Math.floor(diff/1e3)%60;
+  };
+  tick(); setInterval(tick, 1000);
+  $('calBtn').addEventListener('click', () => {
+    const fmt = dt => dt.toISOString().replace(/[-:]|\.\d{3}/g,'');
+    const end = new Date(eventDate.getTime() + CONFIG.durationHours*36e5);
+    const title = `Nikkah of ${CONFIG.groom || ''} & ${CONFIG.bride || ''}`.replace(/\s+/g,' ').trim();
+    const loc = [CONFIG.venueName, CONFIG.venueAddress].filter(Boolean).join(', ');
+    const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Nikah Invitation//EN','BEGIN:VEVENT',
+      `UID:${Date.now()}@nikah-invitation`,`DTSTAMP:${fmt(new Date())}`,`DTSTART:${fmt(eventDate)}`,`DTEND:${fmt(end)}`,
+      `SUMMARY:${title}`,`LOCATION:${loc}`,'END:VEVENT','END:VCALENDAR'].join('\r\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
+    a.download = 'nikkah.ics'; a.click(); URL.revokeObjectURL(a.href);
+  });
+}
+
+/* ---------- strands: hang from the crown of the rose arch, fan out when touched ---------- */
+const NS = 'http://www.w3.org/2000/svg';
+const mk = (tag, attrs, parent) => {
+  const el = document.createElementNS(NS, tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  parent.appendChild(el);
+  return el;
+};
+let seed = 20260930;
+const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+
+(function buildStrands(){
+  // curtain.png is the painted curtain cropped from the artwork at this box (artwork px)
+  const X0 = 150, Y0 = 630, W = 214, H = 516;
+  const CX = 268, CY = 636;                 // crown of the arch: every strip swings from here
+  const n = 28, step = W / n, overlap = step * .9;   // strand-width strips with soft overlapping edges
+  const JOINTS = [Y0, 790, 950, Y0 + H];             // each strip is three hinged segments so it droops in a curve
+  const defs = $('defs'), g = $('curtain');
+  for (let i = 0; i < n; i++){
+    const x = X0 + i*step - overlap/2, w = step + overlap, xc = X0 + (i + .5)*step;
+    // centre strips swing furthest, so the curtain fans open from the middle outward
+    const c = (i + .5)/n - .5;                                   // -0.5 .. 0.5
+    const side = c < 0 ? -1 : 1;
+    const f = 1 - Math.abs(c)*2;                                 // 1 at centre .. 0 at the edge
+    // NB: SVG rotate() with a positive angle swings a hanging strip to the LEFT, hence -side
+    const a1 = -side * (30 + f*48) + (rnd()-.5)*3;
+    const dl = (Math.abs(c)*.5 + rnd()*.08).toFixed(2);     // opens from the middle outward like a wave
+    let parent = g;
+    for (let k = 0; k < 3; k++){
+      const y = JOINTS[k] - (k ? 3 : 0), h = JOINTS[k+1] - y;
+      const mask = mk('mask', { id:`m${i}_${k}`, maskUnits:'userSpaceOnUse', x, y, width:w, height:h }, defs);
+      mk('rect', { x, y, width:w, height:h, fill:'url(#feather)' }, mask);
+      const ox = k ? xc : CX, oy = k ? JOINTS[k] : CY;         // top segment swings from the crown, lower ones from the joint above
+      const seg = mk('g', { class: k ? 'joint' : 'strand', style:`transform-origin:${ox.toFixed(1)}px ${oy}px;--a1:${a1.toFixed(1)}deg;--dl:${dl}s` }, parent);
+      mk('image', { href:'curtain.png?v=5', x:X0, y:Y0, width:W, height:H, mask:`url(#m${i}_${k})`, preserveAspectRatio:'none' }, seg);
+      parent = seg;
+    }
+  }
+})();
+/* ---------- envelope + opening sequence ---------- */
+const card = $('card'), details = $('details'), hit = $('hit'), env = $('env');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait = ms => new Promise(r => setTimeout(r, reduceMotion ? 0 : ms));
+let envOpened = false;
+async function openEnvelope(){
+  if (envOpened) return;
+  envOpened = true;
+  env.classList.add('open');
+  if (navigator.vibrate) navigator.vibrate(12);
+  await wait(900);
+  card.classList.add('live');                 // artwork fades up behind the opening flaps
+  startPetals();
+  await wait(1700);
+  env.classList.add('gone');
+  // the text takes turns in the panel, like a spoken introduction
+  const show = async (el, hold) => { el.classList.add('on'); await wait(hold); el.classList.remove('on'); el.classList.add('off'); await wait(900); };
+  await show($('l1'), 3600);
+  await show($('l2'), 3800);
+  if (CONFIG.hosts){ $('l3').textContent = CONFIG.hosts; await show($('l3'), 3600); }
+  $('final').classList.add('on');
+  await wait(1200);
+  card.classList.add('ready');                // date + "touch the flowers" hint
+}
+env.addEventListener('click', openEnvelope);
+env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openEnvelope(); } });
+
+/* ---------- interactions ---------- */
+let busy = false;
+function toggleCurtain(){
+  if (busy) return;
+  busy = true; setTimeout(() => busy = false, 800);
+  const opening = !card.classList.contains('opened');
+  card.classList.toggle('opened', opening);
+  if (opening){
+    card.classList.add('revealed');
+    startPetals(); burstPetals();
+    if (navigator.vibrate) navigator.vibrate(18);
+  }
+}
+hit.addEventListener('click', toggleCurtain);
+hit.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggleCurtain(); } });
+
+const openDetails = () => { details.classList.add('show'); details.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; $('closeBtn').focus(); };
+const closeDetails = () => { details.classList.remove('show'); details.setAttribute('aria-hidden','true'); document.body.style.overflow=''; $('detailsBtn').focus(); };
+$('detailsBtn').addEventListener('click', openDetails);
+$('closeBtn').addEventListener('click', closeDetails);
+$('backBtn').addEventListener('click', closeDetails);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && details.classList.contains('show')) closeDetails(); });
+
+/* ---------- petals ---------- */
+let petalsStarted = false;
+function startPetals(){
+  if (reduceMotion || petalsStarted) return;
+  petalsStarted = true;
+  const wrap = $('petals');
+  for (let i = 0; i < 16; i++){
+    const p = document.createElement('i');
+    p.className = 'petal';
+    p.style.left = Math.random()*100 + '%';
+    p.style.setProperty('--d', (9 + Math.random()*8) + 's');
+    p.style.setProperty('--delay', (Math.random()*10) + 's');
+    p.style.setProperty('--x', (Math.random()*120 - 60) + 'px');
+    wrap.appendChild(p);
+  }
+}
+function burstPetals(){
+  if (reduceMotion) return;
+  const wrap = $('petals');
+  const rect = card.getBoundingClientRect(), hb = hit.getBoundingClientRect();
+  const ox = hb.left - rect.left + hb.width/2, oy = hb.top - rect.top + hb.height*.3;
+  for (let i = 0; i < 22; i++){
+    const b = document.createElement('i');
+    b.className = 'burst';
+    b.style.left = ox + 'px'; b.style.top = oy + 'px';
+    const ang = Math.random()*Math.PI*2, dist = 90 + Math.random()*140;
+    b.style.setProperty('--bx', Math.cos(ang)*dist + 'px');
+    b.style.setProperty('--by', (Math.sin(ang)*dist + 60) + 'px');
+    b.style.setProperty('--br', (Math.random()*720 - 360) + 'deg');
+    wrap.appendChild(b);
+    b.addEventListener('animationend', () => b.remove());
+  }
+}
+</script>
+</body>
+</html>
